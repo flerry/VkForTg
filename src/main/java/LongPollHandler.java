@@ -67,7 +67,7 @@ class LongPollHandler extends Thread {
                         }
                     }
                 }
-            } catch (JSONException e){
+            } catch (JSONException e) {
                 System.out.println("Ошибка получения обновлений... Пробую снова...");
             }
         }

@@ -19,7 +19,6 @@ class TgBot extends TelegramLongPollingBot {
     private static final String WRITE_VK_ID = "Введите свой id";
     private static final String WRITE_START = "Последний этап: напиши боту /start";
 
-
     private static String botName;
     private static String botToken;
     private static String vkToken;
@@ -29,6 +28,8 @@ class TgBot extends TelegramLongPollingBot {
 
     static long tgChatId;
     private static String vkChatId;
+
+    private static boolean isStarted = false;
 
     public static void main(String[] args) {
 
@@ -78,9 +79,13 @@ class TgBot extends TelegramLongPollingBot {
 
         if (message != null && message.hasText()) {
             String messageBody = message.getText();
-            tgChatId = message.getChatId();
 
-            if (messageBody.equals("/start")) {
+            if (tgChatId < 1) {
+                tgChatId = message.getChatId();
+            }
+
+            if (messageBody.equals("/start") && !isStarted) {
+                isStarted = true;
                 sendMsg(message, "Поехали!");
                 System.out.println("Поехали!");
                 new LongPollHandler(vkUserId, vkToken).start();
