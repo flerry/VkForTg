@@ -15,13 +15,13 @@ import java.util.HashMap;
 class VkWork {
     private static String token;
 
-    static HashMap<String, String> diskURL = new HashMap<>();
+    static final HashMap<String, String> diskURL = new HashMap<>();
 
-    public VkWork(String token2) {
+    VkWork(String token2) {
         token = token2;
     }
 
-    public StringBuilder getFriends() {
+    StringBuilder getFriends() {
         String query = "https://api.vk.com/method/friends.get?order=hints&fields=name&access_token=" + token + "&v=5.62";
 
         StringBuilder listFriends = new StringBuilder();
@@ -60,7 +60,7 @@ class VkWork {
     }
 
 
-    public void sendMsg(String userId, String message) {
+    void sendMsg(String userId, String message) {
         String query;
 
         try {
@@ -72,10 +72,10 @@ class VkWork {
         }
     }
 
-    public String getUserNames(String userId) {
+    String getUserNames(String userId) {
         String query = "https://api.vk.com/method/users.get?user_ids=" + userId + "&fields=name&access_token=" + token + "&v=5.62";
 
-        JSONObject response = new JSONObject(Connection.getSimpleResponse(query).toString());
+        JSONObject response = new JSONObject(Connection.getSimpleResponse(query));
 
         JSONObject info = response.getJSONArray("response")
                 .getJSONObject(0);
@@ -86,29 +86,27 @@ class VkWork {
         return firstName + " " + lastName;
     }
 
-    public String getUserInfo(String userId) {
+    String getUserInfo(String userId) {
         String query = "http://api.vlad805.ru/vk.getDateUserRegistration?screen_name=id" + userId;
 
-        JSONObject response = new JSONObject(Connection.getSimpleResponse(query).toString())
+        JSONObject response = new JSONObject(Connection.getSimpleResponse(query))
                 .getJSONObject("response");
 
-        StringBuilder info = new StringBuilder()
-                .append("Ссылка:").append("\n")
-                .append("http://vk.com/")
-                .append(response.getInt("userId")).append("\n")
-                .append("Зарегистрирован:").append("\n")
-                .append(response.getString("date")).append("\n")
-                .append("Время регистрации:").append("\n")
-                .append(new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-                        .format(new java.util.Date(response.getLong("unixtime") * 1000))).append("\n")
-                .append("Аккаунт существует (дней):").append("\n")
-                .append(response.getString("date"));
 
-
-        return info.toString();
+        return "Ссылка:" + "\n" +
+                "http://vk.com/" +
+                response.getInt("userId") + "\n" +
+                "Зарегистрирован:" + "\n" +
+                response.getString("date") + "\n" +
+                "Время регистрации:" + "\n" +
+                new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+                        .format(new java.util.Date(response.getLong("unixtime") * 1000)) +
+                "\n" +
+                "Аккаунт существует (дней):" + "\n" +
+                response.getString("date");
     }
 
-    public String searchAudio(String songName) throws ClientException, ApiException {
+    String searchAudio(String songName) throws ClientException, ApiException {
         final TransportClient transportClient = HttpTransportClient.getInstance();
         final VkApiClient vk = new VkApiClient(transportClient);
         final UserActor actor = new UserActor(325573913, "64ab5f700ed1e57dd74fca29b5abe28f60473960092e58a48e4e37efa5e2403abfb56896d4a0ca8d79dd2");
