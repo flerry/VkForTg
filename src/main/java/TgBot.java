@@ -27,7 +27,7 @@ class TgBot extends TelegramLongPollingBot {
 
     private static VkWork vk;
 
-    public static long tgChatId;
+    static long tgChatId;
     private static String vkChatId;
 
     public static void main(String[] args) {
@@ -89,9 +89,7 @@ class TgBot extends TelegramLongPollingBot {
             if (messageBody.contains("/mp")) {
                 try {
                     sendMsg(message, vk.searchAudio(messageBody.replaceAll("/mp ", "")));
-                } catch (ClientException e) {
-                    e.printStackTrace();
-                } catch (ApiException e) {
+                } catch (ClientException | ApiException e) {
                     e.printStackTrace();
                 }
             }

@@ -1,4 +1,4 @@
-public class MapAudioCleare extends Thread {
+class MapAudioCleare extends Thread {
     @Override
     public void run() {
         while (true) {
